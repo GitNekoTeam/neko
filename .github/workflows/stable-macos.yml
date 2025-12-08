@@ -40,6 +40,12 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Setup Rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+          target: ${{ matrix.vscode_arch == 'x64' && 'x86_64-apple-darwin' || 'aarch64-apple-darwin' }}
+
       - name: Clone VSCode
         run: . get_repo.sh
 

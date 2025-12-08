@@ -23,8 +23,9 @@ jobs:
         include:
           - vscode_arch: x64
             npm_arch: x64
-          - vscode_arch: arm64
-            npm_arch: arm64
+          # ARM64 disabled - requires cross-compilation toolchain
+          # - vscode_arch: arm64
+          #   npm_arch: arm64
 
     steps:
       - name: Checkout
@@ -39,6 +40,11 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
+      - name: Setup Rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
 
       - name: Clone VSCode
         shell: bash
