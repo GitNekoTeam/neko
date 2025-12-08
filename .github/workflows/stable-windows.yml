@@ -7,6 +7,10 @@ on:
     paths-ignore:
       - '**/*.md'
   workflow_dispatch:
+    inputs:
+      force_build:
+        type: boolean
+        description: Force build
 
 env:
   APP_NAME: Neko
@@ -15,18 +19,30 @@ env:
   VSCODE_QUALITY: stable
 
 jobs:
-  compile:
-    runs-on: ubuntu-22.04
-    env:
-      VSCODE_ARCH: x64
+  check:
+    runs-on: ubuntu-latest
     outputs:
-      MS_COMMIT: ${{ steps.export.outputs.MS_COMMIT }}
-      MS_TAG: ${{ steps.export.outputs.MS_TAG }}
-      RELEASE_VERSION: ${{ steps.export.outputs.RELEASE_VERSION }}
+      MS_COMMIT: ${{ env.MS_COMMIT }}
+      MS_TAG: ${{ env.MS_TAG }}
+      RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
+      - name: Clone VSCode repo
+        run: . get_repo.sh
+
+  compile:
+    needs: check
+    runs-on: ubuntu-22.04
+    env:
+      MS_COMMIT: ${{ needs.check.outputs.MS_COMMIT }}
+      MS_TAG: ${{ needs.check.outputs.MS_TAG }}
+      RELEASE_VERSION: ${{ needs.check.outputs.RELEASE_VERSION }}
+      VSCODE_ARCH: x64
+
+    steps:
+      - uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -43,15 +59,17 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y jq libxkbfile-dev pkg-config libsecret-1-dev libkrb5-dev imagemagick
 
-      - name: Clone VSCode
+      - name: Clone VSCode repo
         run: . get_repo.sh
 
       - name: Build
-        run: ./build.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SHOULD_BUILD: 'yes'
           CI_BUILD: 'yes'
+          SHOULD_BUILD_REH: 'no'
+          SHOULD_BUILD_REH_WEB: 'no'
+        run: ./build.sh
 
       - name: Export outputs
         id: export
@@ -74,8 +92,13 @@ jobs:
           path: ./vscode.tar.gz
           retention-days: 1
 
+    outputs:
+      RELEASE_VERSION: ${{ steps.export.outputs.RELEASE_VERSION }}
+
   build:
-    needs: compile
+    needs:
+      - check
+      - compile
     runs-on: windows-2022
     strategy:
       fail-fast: false
@@ -83,18 +106,19 @@ jobs:
         include:
           - vscode_arch: x64
             npm_arch: x64
+          - vscode_arch: arm64
+            npm_arch: arm64
     defaults:
       run:
         shell: bash
     env:
-      MS_COMMIT: ${{ needs.compile.outputs.MS_COMMIT }}
-      MS_TAG: ${{ needs.compile.outputs.MS_TAG }}
+      MS_COMMIT: ${{ needs.check.outputs.MS_COMMIT }}
+      MS_TAG: ${{ needs.check.outputs.MS_TAG }}
       RELEASE_VERSION: ${{ needs.compile.outputs.RELEASE_VERSION }}
       VSCODE_ARCH: ${{ matrix.vscode_arch }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -132,6 +156,5 @@ jobs:
         with:
           name: neko-windows-${{ matrix.vscode_arch }}
           path: assets/*
-          if-no-files-found: ignore
+          if-no-files-found: warn
           retention-days: 7
-

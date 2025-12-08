@@ -7,6 +7,10 @@ on:
     paths-ignore:
       - '**/*.md'
   workflow_dispatch:
+    inputs:
+      force_build:
+        type: boolean
+        description: Force build
 
 env:
   APP_NAME: Neko
@@ -15,21 +19,30 @@ env:
   VSCODE_QUALITY: stable
 
 jobs:
-  build:
+  check:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - vscode_arch: x64
-            npm_arch: x64
-          # ARM64 disabled - requires cross-compilation toolchain
-          # - vscode_arch: arm64
-          #   npm_arch: arm64
+    outputs:
+      MS_COMMIT: ${{ env.MS_COMMIT }}
+      MS_TAG: ${{ env.MS_TAG }}
+      RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
+      - name: Clone VSCode repo
+        run: . get_repo.sh
+
+  compile:
+    needs: check
+    runs-on: ubuntu-22.04
+    env:
+      MS_COMMIT: ${{ needs.check.outputs.MS_COMMIT }}
+      MS_TAG: ${{ needs.check.outputs.MS_TAG }}
+      RELEASE_VERSION: ${{ needs.check.outputs.RELEASE_VERSION }}
+      VSCODE_ARCH: x64
+
+    steps:
+      - uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -46,28 +59,85 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y jq libxkbfile-dev pkg-config libsecret-1-dev libkrb5-dev imagemagick
 
-      - name: Clone VSCode
+      - name: Clone VSCode repo
         run: . get_repo.sh
 
       - name: Build
-        run: ./build.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VSCODE_ARCH: ${{ matrix.vscode_arch }}
-          npm_config_arch: ${{ matrix.npm_arch }}
           SHOULD_BUILD: 'yes'
-          CI_BUILD: 'no'
+          CI_BUILD: 'yes'
+          SHOULD_BUILD_REH: 'no'
+          SHOULD_BUILD_REH_WEB: 'no'
+        run: ./build.sh
+
+      - name: Compress vscode artifact
+        run: |
+          find vscode -type f -not -path "*/node_modules/*" -not -path "vscode/.build/node/*" -not -path "vscode/.git/*" > vscode.txt
+          echo "vscode/.build/extensions/node_modules" >> vscode.txt
+          echo "vscode/.git" >> vscode.txt
+          tar -czf vscode.tar.gz -T vscode.txt
+
+      - name: Upload vscode artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: vscode
+          path: ./vscode.tar.gz
+          retention-days: 1
+
+  build:
+    needs:
+      - check
+      - compile
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - vscode_arch: x64
+            npm_arch: x64
+            image: vscodium/vscodium-linux-build-agent:focal-x64
+          - vscode_arch: arm64
+            npm_arch: arm64
+            image: vscodium/vscodium-linux-build-agent:focal-arm64
+    container:
+      image: ${{ matrix.image }}
+    env:
+      MS_COMMIT: ${{ needs.check.outputs.MS_COMMIT }}
+      MS_TAG: ${{ needs.check.outputs.MS_TAG }}
+      RELEASE_VERSION: ${{ needs.check.outputs.RELEASE_VERSION }}
+      VSCODE_ARCH: ${{ matrix.vscode_arch }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: ./build/linux/deps.sh
+
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+
+      - name: Download vscode artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: vscode
+
+      - name: Build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          npm_config_arch: ${{ matrix.npm_arch }}
+        run: ./build/linux/package_bin.sh
 
       - name: Prepare assets
-        run: ./prepare_assets.sh
         env:
-          VSCODE_ARCH: ${{ matrix.vscode_arch }}
+          SHOULD_BUILD_REH: 'no'
+          SHOULD_BUILD_REH_WEB: 'no'
+          SHOULD_BUILD_APPIMAGE: 'no'
+        run: ./prepare_assets.sh
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: neko-linux-${{ matrix.vscode_arch }}
           path: assets/*
-          if-no-files-found: ignore
+          if-no-files-found: warn
           retention-days: 7
-

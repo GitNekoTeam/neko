@@ -22,37 +22,92 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Release version: $VERSION"
 
-      - name: Download Linux artifacts
+      - name: Download Linux x64 artifacts
         uses: dawidd6/action-download-artifact@v6
         with:
           workflow: stable-linux.yml
           branch: main
-          path: artifacts/linux
+          name: neko-linux-x64
+          path: artifacts/linux-x64
           skip_unpack: false
           if_no_artifact_found: warn
 
-      - name: Download macOS artifacts
+      - name: Download Linux arm64 artifacts
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: stable-linux.yml
+          branch: main
+          name: neko-linux-arm64
+          path: artifacts/linux-arm64
+          skip_unpack: false
+          if_no_artifact_found: warn
+
+      - name: Download macOS x64 artifacts
         uses: dawidd6/action-download-artifact@v6
         with:
           workflow: stable-macos.yml
           branch: main
-          path: artifacts/macos
+          name: neko-macos-x64
+          path: artifacts/macos-x64
           skip_unpack: false
           if_no_artifact_found: warn
 
-      - name: Download Windows artifacts
+      - name: Download macOS arm64 artifacts
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: stable-macos.yml
+          branch: main
+          name: neko-macos-arm64
+          path: artifacts/macos-arm64
+          skip_unpack: false
+          if_no_artifact_found: warn
+
+      - name: Download macOS universal artifacts
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: stable-macos.yml
+          branch: main
+          name: neko-macos-universal
+          path: artifacts/macos-universal
+          skip_unpack: false
+          if_no_artifact_found: warn
+
+      - name: Download Windows x64 artifacts
         uses: dawidd6/action-download-artifact@v6
         with:
           workflow: stable-windows.yml
           branch: main
-          path: artifacts/windows
+          name: neko-windows-x64
+          path: artifacts/windows-x64
+          skip_unpack: false
+          if_no_artifact_found: warn
+
+      - name: Download Windows arm64 artifacts
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: stable-windows.yml
+          branch: main
+          name: neko-windows-arm64
+          path: artifacts/windows-arm64
           skip_unpack: false
           if_no_artifact_found: warn
 
       - name: Prepare release assets
         run: |
           mkdir -p release
-          find artifacts -type f \( -name "*.deb" -o -name "*.rpm" -o -name "*.tar.gz" -o -name "*.dmg" -o -name "*.zip" -o -name "*.exe" -o -name "*.msi" \) -exec cp {} release/ \;
+          
+          # Copy all artifacts to release folder
+          find artifacts -type f \( \
+            -name "*.deb" -o \
+            -name "*.rpm" -o \
+            -name "*.tar.gz" -o \
+            -name "*.dmg" -o \
+            -name "*.zip" -o \
+            -name "*.exe" -o \
+            -name "*.msi" -o \
+            -name "*.AppImage" \
+          \) -exec cp {} release/ \;
+          
           echo "Release assets:"
           ls -la release/
 

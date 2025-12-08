@@ -22,7 +22,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       all_success: ${{ steps.check.outputs.all_success }}
-      should_deploy: ${{ steps.check.outputs.should_deploy }}
     steps:
       - name: Check all builds completed
         id: check
@@ -51,7 +50,7 @@ jobs:
               const run = runs.data.workflow_runs[0];
               if (run.conclusion !== 'success') {
                 allSuccess = false;
-                console.log(`${workflow}: ${run.conclusion}`);
+                console.log(`${workflow}: ${run.conclusion || run.status}`);
               } else {
                 console.log(`${workflow}: success (${run.head_sha.substring(0, 7)})`);
                 if (!latestCommit) {
@@ -64,7 +63,6 @@ jobs:
             }
             
             core.setOutput('all_success', allSuccess.toString());
-            core.setOutput('should_deploy', allSuccess.toString());
 
   deploy:
     runs-on: ubuntu-latest
@@ -111,7 +109,6 @@ jobs:
             echo "Tag ${{ steps.version.outputs.tag }} already exists"
           else
             echo "exists=false" >> $GITHUB_OUTPUT
-            echo "Tag ${{ steps.version.outputs.tag }} does not exist"
           fi
 
       - name: Create and push tag
