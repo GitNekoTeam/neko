@@ -73,18 +73,6 @@
   "extensionAllowedBadgeProvidersRegex": [
     "^https:\\/\\/github\\.com\\/[^/]+\\/[^/]+\\/(actions\\/)?workflows\\/.*badge\\.svg"
   ],
-  "builtInExtensions": [
-    {
-      "name": "neko-ai",
-      "version": "1.0.0",
-      "repo": "https://github.com/GitNekoTeam/neko",
-      "metadata": {
-        "id": "neko-ai",
-        "publisherId": "gitneko",
-        "publisherDisplayName": "GitNeko"
-      }
-    }
-  ],
   "extensionEnabledApiProposals": {
     "gitneko.neko-ai": [
       "inlineCompletionsAdditions",
