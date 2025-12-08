@@ -59,6 +59,7 @@ mkdir -p "${DEST_DIR}"
 cp -r dist "${DEST_DIR}/" 2>/dev/null || mkdir -p "${DEST_DIR}/dist"
 cp -r out "${DEST_DIR}/" 2>/dev/null || true
 cp -r src "${DEST_DIR}/" 2>/dev/null || true
+cp -r assets "${DEST_DIR}/" 2>/dev/null || true
 cp package.json "${DEST_DIR}/"
 cp tsconfig.json "${DEST_DIR}/"
 cp README.md "${DEST_DIR}/" 2>/dev/null || true
@@ -77,22 +78,27 @@ if [[ -d "src/i18n" ]]; then
 fi
 
 # Install production dependencies
+# Note: For Windows two-stage build, node_modules is excluded from vscode.tar.gz
+# and will be reinstalled during the package stage
 echo "Installing production dependencies..."
 cd "${DEST_DIR}"
 npm install --production --ignore-scripts 2>/dev/null || true
 
-# Clean up unnecessary files to reduce file count (helps with Windows EMFILE error)
+# Cleanup to reduce file count
 echo "Cleaning up unnecessary files..."
-find node_modules -name "*.md" -type f -delete 2>/dev/null || true
-find node_modules -name "*.txt" -type f -delete 2>/dev/null || true
-find node_modules -name "LICENSE*" -type f -delete 2>/dev/null || true
-find node_modules -name ".npmignore" -type f -delete 2>/dev/null || true
-find node_modules -name ".gitignore" -type f -delete 2>/dev/null || true
-find node_modules -type d -name "test" -exec rm -rf {} + 2>/dev/null || true
-find node_modules -type d -name "tests" -exec rm -rf {} + 2>/dev/null || true
-find node_modules -type d -name "__tests__" -exec rm -rf {} + 2>/dev/null || true
-find node_modules -type d -name "docs" -exec rm -rf {} + 2>/dev/null || true
-find node_modules -type d -name "examples" -exec rm -rf {} + 2>/dev/null || true
+if [[ -d "node_modules" ]]; then
+    find node_modules -name "*.md" -type f -delete 2>/dev/null || true
+    find node_modules -name "*.txt" -type f -delete 2>/dev/null || true
+    find node_modules -name "LICENSE*" -type f -delete 2>/dev/null || true
+    find node_modules -name "CHANGELOG*" -type f -delete 2>/dev/null || true
+    find node_modules -name ".npmignore" -type f -delete 2>/dev/null || true
+    find node_modules -name ".gitignore" -type f -delete 2>/dev/null || true
+    find node_modules -type d -name "test" -exec rm -rf {} + 2>/dev/null || true
+    find node_modules -type d -name "tests" -exec rm -rf {} + 2>/dev/null || true
+    find node_modules -type d -name "docs" -exec rm -rf {} + 2>/dev/null || true
+    find node_modules -type d -name ".github" -exec rm -rf {} + 2>/dev/null || true
+    echo "File count after cleanup: $(find node_modules -type f 2>/dev/null | wc -l)"
+fi
 
 # Add neko-ai to VSCode build compilations
 echo "Adding neko-ai to VSCode build system..."

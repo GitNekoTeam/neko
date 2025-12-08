@@ -39,7 +39,7 @@
         {
           "id": "neko-ai-sidebar",
           "title": "Neko AI",
-          "icon": "assets/icons/neko.svg"
+          "icon": "assets/icons/neko.png"
         }
       ]
     },
@@ -104,8 +104,8 @@
         "command": "neko-ai.generateCommitMessage",
         "title": "Generate Commit Message",
         "icon": {
-          "light": "assets/icons/neko-light.svg",
-          "dark": "assets/icons/neko-dark.svg"
+          "light": "assets/icons/neko-light.png",
+          "dark": "assets/icons/neko-dark.png"
         },
         "category": "Neko AI"
       },
