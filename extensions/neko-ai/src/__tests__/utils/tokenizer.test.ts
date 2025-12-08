@@ -1,4 +1,11 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
+
+vi.mock('vscode', () => ({
+    workspace: {
+        workspaceFolders: [{ uri: { fsPath: '/workspace' } }]
+    }
+}));
+
 import { countTokens, truncateToTokens, splitIntoChunks, estimateTokens } from '../../utils/tokenizer';
 
 describe('tokenizer', () => {

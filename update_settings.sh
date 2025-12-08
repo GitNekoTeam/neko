@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC1091,2148
 # Neko: Update default settings to disable telemetry
+# This script replaces telemetry.patch with a more robust approach
 
 DEFAULT_TRUE="'default': true"
 DEFAULT_FALSE="'default': false"
 DEFAULT_ON="'default': TelemetryConfiguration.ON"
 DEFAULT_OFF="'default': TelemetryConfiguration.OFF"
-TELEMETRY_CRASH_REPORTER="'telemetry.enableCrashReporter':"
-TELEMETRY_CONFIGURATION=" TelemetryConfiguration.ON"
-NLS=workbench.settings.enableNaturalLanguageSearch
 
 # include common functions
 . ../utils.sh
@@ -26,6 +24,8 @@ update_setting () {
   # go through lines of file, looking for block that contains setting
   SETTING="${1}"
   LINE_NUM=0
+  IN_SETTING=0
+  FOUND=0
   while read -r line; do
     LINE_NUM=$(( LINE_NUM + 1 ))
     if [[ "${line}" == *"${SETTING}"* ]]; then
@@ -50,8 +50,30 @@ update_setting () {
   fi
 
   replace "${DEFAULT_TRUE_TO_FALSE}" "${FILENAME}"
+  echo "Updated setting ${SETTING} in ${FILENAME} at line ${LINE_NUM}"
 }
 
-update_setting "${TELEMETRY_CRASH_REPORTER}" src/vs/workbench/electron-sandbox/desktop.contribution.ts
-update_setting "${TELEMETRY_CONFIGURATION}" src/vs/platform/telemetry/common/telemetryService.ts
-update_setting "${NLS}" src/vs/workbench/contrib/preferences/common/preferencesContribution.ts
+# 1. Telemetry service - TelemetryConfiguration.ON -> OFF
+update_setting "telemetry.telemetryLevel" src/vs/platform/telemetry/common/telemetryService.ts
+
+# 2. Telemetry service - enableTelemetry default true -> false
+update_setting "telemetry.enableTelemetry" src/vs/platform/telemetry/common/telemetryService.ts
+
+# 3. Workbench contribution - enableNaturalLanguageSearch (command palette)
+update_setting "workbench.commandPalette.experimental.enableNaturalLanguageSearch" src/vs/workbench/browser/workbench.contribution.ts
+
+# 4. Edit telemetry contribution - experimental edit telemetry
+update_setting "telemetry.experimental.editTelemetry" src/vs/workbench/contrib/editTelemetry/browser/editTelemetry.contribution.ts
+
+# 5. Preferences contribution - natural language settings search
+update_setting "workbench.settings.enableNaturalLanguageSearch" src/vs/workbench/contrib/preferences/common/preferencesContribution.ts
+
+# 6. Desktop contribution - crash reporter (electron-sandbox for newer versions)
+if [[ -f "src/vs/workbench/electron-sandbox/desktop.contribution.ts" ]]; then
+  update_setting "telemetry.enableCrashReporter" src/vs/workbench/electron-sandbox/desktop.contribution.ts
+elif [[ -f "src/vs/workbench/electron-browser/desktop.contribution.ts" ]]; then
+  update_setting "telemetry.enableCrashReporter" src/vs/workbench/electron-browser/desktop.contribution.ts
+fi
+
+# 7. Assignment service - experiments
+update_setting "workbench.enableExperiments" src/vs/workbench/services/assignment/common/assignmentService.ts

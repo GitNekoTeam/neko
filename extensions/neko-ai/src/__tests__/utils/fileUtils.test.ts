@@ -1,4 +1,19 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
+
+vi.mock('vscode', () => ({
+    workspace: {
+        workspaceFolders: [{ uri: { fsPath: '/workspace' } }],
+        fs: {
+            readFile: vi.fn(),
+            stat: vi.fn()
+        }
+    },
+    Uri: {
+        file: (path: string) => ({ fsPath: path }),
+        parse: (path: string) => ({ fsPath: path })
+    }
+}));
+
 import { 
     getAbsolutePath, 
     isTextFile, 
