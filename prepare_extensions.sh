@@ -27,7 +27,12 @@ cd "${EXTENSION_DIR}"
 
 # Install dependencies
 echo "Installing extension dependencies..."
-npm ci
+if [[ -f "package-lock.json" ]]; then
+    npm ci
+else
+    echo "No package-lock.json found, running npm install..."
+    npm install
+fi
 
 # Run linting
 echo "Running ESLint..."

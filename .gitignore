@@ -53,6 +53,9 @@ package-lock.json
 yarn.lock
 pnpm-lock.yaml
 
+# Allow package-lock.json in extensions
+!extensions/*/package-lock.json
+
 # TypeScript
 *.tsbuildinfo
 .tscache/
