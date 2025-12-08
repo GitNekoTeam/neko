@@ -149,10 +149,12 @@ elif [[ "${OS_NAME}" == "windows" ]]; then
 else
   cd vscode || { echo "'vscode' dir not found"; exit 1; }
 
-  # Disable AppImage for now - requires special build environment
-  SHOULD_BUILD_APPIMAGE="no"
+  # AppImage only supported on x64
+  if [[ "${SHOULD_BUILD_APPIMAGE}" != "no" && "${VSCODE_ARCH}" != "x64" ]]; then
+    SHOULD_BUILD_APPIMAGE="no"
+  fi
 
-  if [[ "${SHOULD_BUILD_DEB}" != "no" ]]; then
+  if [[ "${SHOULD_BUILD_DEB}" != "no" || "${SHOULD_BUILD_APPIMAGE}" != "no" ]]; then
     npm run gulp "vscode-linux-${VSCODE_ARCH}-prepare-deb"
     npm run gulp "vscode-linux-${VSCODE_ARCH}-build-deb"
   fi
@@ -163,6 +165,11 @@ else
   fi
 
   cd ..
+
+  if [[ "${SHOULD_BUILD_APPIMAGE}" != "no" ]]; then
+    echo "Building AppImage"
+    . ./build/linux/appimage/build.sh
+  fi
 
   if [[ "${CI_BUILD}" == "no" ]]; then
     . ./stores/snapcraft/build.sh

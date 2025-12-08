@@ -131,7 +131,7 @@ jobs:
         env:
           SHOULD_BUILD_REH: 'no'
           SHOULD_BUILD_REH_WEB: 'no'
-          SHOULD_BUILD_APPIMAGE: 'no'
+          SHOULD_BUILD_APPIMAGE: ${{ matrix.vscode_arch == 'x64' && 'yes' || 'no' }}
         run: ./prepare_assets.sh
 
       - name: Upload artifacts
