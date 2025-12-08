@@ -85,6 +85,11 @@ npm install --production --ignore-scripts 2>/dev/null || true
 echo "Adding neko-ai to VSCode build system..."
 cd "${VSCODE_DIR}"
 
+# Source utils.sh for cross-platform sed
+if [[ -f "../utils.sh" ]]; then
+    . ../utils.sh
+fi
+
 GULPFILE="build/gulpfile.extensions.js"
 if [[ -f "${GULPFILE}" ]]; then
     # Check if neko-ai is already in the compilations
@@ -92,7 +97,17 @@ if [[ -f "${GULPFILE}" ]]; then
         echo "Patching ${GULPFILE}..."
         # Find the line with vscode-colorize-tests and add neko-ai after it
         if grep -q "vscode-colorize-tests/tsconfig.json" "${GULPFILE}"; then
-            sed -i "/vscode-colorize-tests\/tsconfig.json/a\\        'extensions/neko-ai/tsconfig.json'," "${GULPFILE}"
+            # Use cross-platform replace function from utils.sh
+            if type -t replace &> /dev/null; then
+                replace "/vscode-colorize-tests\/tsconfig.json/a\\        'extensions\/neko-ai\/tsconfig.json'," "${GULPFILE}"
+            else
+                # Fallback to platform-specific sed
+                if [[ "${OS_NAME}" == "windows" ]] || sed --version &> /dev/null; then
+                    sed -i "/vscode-colorize-tests\/tsconfig.json/a\\        'extensions/neko-ai/tsconfig.json'," "${GULPFILE}"
+                else
+                    sed -i '' "/vscode-colorize-tests\/tsconfig.json/a\\        'extensions/neko-ai/tsconfig.json'," "${GULPFILE}"
+                fi
+            fi
             echo "Added neko-ai to compilations"
         else
             echo "Warning: Could not find insertion point in ${GULPFILE}"
