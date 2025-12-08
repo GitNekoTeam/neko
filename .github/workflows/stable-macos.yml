@@ -93,34 +93,46 @@ jobs:
 
       - name: Create Universal binary
         run: |
-          set -e
+          set -ex
           mkdir -p assets
           
           # Extract x64 and arm64 apps
           cd artifacts/x64
-          unzip -q *.zip -d x64_app
+          unzip -q *.zip
           cd ../arm64
-          unzip -q *.zip -d arm64_app
+          unzip -q *.zip
           cd ../..
+          
+          # Debug: show extracted contents
+          echo "x64 contents:"
+          ls -la artifacts/x64/
+          echo "arm64 contents:"
+          ls -la artifacts/arm64/
           
           # Get version from filename
           VERSION=$(ls artifacts/x64/*.zip | sed 's/.*darwin-x64-\(.*\)\.zip/\1/')
           echo "Version: $VERSION"
           
-          # Create universal app directory
-          mkdir -p universal_app
+          # Find the .app directory name
+          X64_APP=$(find artifacts/x64 -maxdepth 1 -name "*.app" -type d | head -1)
+          ARM64_APP=$(find artifacts/arm64 -maxdepth 1 -name "*.app" -type d | head -1)
+          APP_NAME_DIR=$(basename "$ARM64_APP")
           
-          # Copy arm64 app as base
-          cp -R artifacts/arm64/arm64_app/Neko.app universal_app/
+          echo "x64 app: $X64_APP"
+          echo "arm64 app: $ARM64_APP"
+          echo "App name: $APP_NAME_DIR"
+          
+          # Create universal app directory and copy arm64 as base
+          mkdir -p universal_app
+          cp -R "$ARM64_APP" universal_app/
           
           # Find and merge Mach-O binaries using lipo
-          find artifacts/x64/x64_app/Neko.app -type f | while read x64_file; do
-            rel_path="${x64_file#artifacts/x64/x64_app/}"
-            arm64_file="artifacts/arm64/arm64_app/${rel_path}"
-            universal_file="universal_app/${rel_path}"
+          find "$X64_APP" -type f | while read x64_file; do
+            rel_path="${x64_file#$X64_APP/}"
+            arm64_file="$ARM64_APP/$rel_path"
+            universal_file="universal_app/$APP_NAME_DIR/$rel_path"
             
             if [ -f "$arm64_file" ]; then
-              # Check if it's a Mach-O binary
               if file "$x64_file" | grep -q "Mach-O"; then
                 mkdir -p "$(dirname "$universal_file")"
                 lipo -create "$x64_file" "$arm64_file" -output "$universal_file" 2>/dev/null || cp "$arm64_file" "$universal_file"
@@ -130,7 +142,7 @@ jobs:
           
           # Create universal zip
           cd universal_app
-          zip -r -X -y "../assets/${APP_NAME}-darwin-universal-${VERSION}.zip" Neko.app
+          zip -r -X -y "../assets/${APP_NAME}-darwin-universal-${VERSION}.zip" "$APP_NAME_DIR"
           cd ..
           
           echo "Universal binary created:"
