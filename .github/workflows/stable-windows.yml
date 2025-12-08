@@ -22,6 +22,7 @@ jobs:
     outputs:
       MS_COMMIT: ${{ steps.export.outputs.MS_COMMIT }}
       MS_TAG: ${{ steps.export.outputs.MS_TAG }}
+      RELEASE_VERSION: ${{ steps.export.outputs.RELEASE_VERSION }}
 
     steps:
       - name: Checkout
@@ -57,6 +58,7 @@ jobs:
         run: |
           echo "MS_COMMIT=${MS_COMMIT}" >> $GITHUB_OUTPUT
           echo "MS_TAG=${MS_TAG}" >> $GITHUB_OUTPUT
+          echo "RELEASE_VERSION=${RELEASE_VERSION}" >> $GITHUB_OUTPUT
 
       - name: Compress vscode artifact
         run: |
@@ -87,6 +89,7 @@ jobs:
     env:
       MS_COMMIT: ${{ needs.compile.outputs.MS_COMMIT }}
       MS_TAG: ${{ needs.compile.outputs.MS_TAG }}
+      RELEASE_VERSION: ${{ needs.compile.outputs.RELEASE_VERSION }}
       VSCODE_ARCH: ${{ matrix.vscode_arch }}
 
     steps:
