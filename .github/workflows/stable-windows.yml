@@ -132,18 +132,3 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
-  trigger-deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    if: success()
-    steps:
-      - name: Trigger deploy check
-        uses: actions/github-script@v7
-        with:
-          script: |
-            await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'deploy.yml',
-              ref: 'main'
-            });
