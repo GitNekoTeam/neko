@@ -33,7 +33,8 @@ if [[ "${SHOULD_BUILD}" == "yes" ]]; then
 
     find "../VSCode-darwin-${VSCODE_ARCH}" -print0 | xargs -0 touch -c
 
-    . ../build_cli.sh
+    # CLI build disabled for initial release
+    # . ../build_cli.sh
 
     VSCODE_PLATFORM="darwin"
   elif [[ "${OS_NAME}" == "windows" ]]; then
@@ -51,7 +52,8 @@ if [[ "${SHOULD_BUILD}" == "yes" ]]; then
         SHOULD_BUILD_REH_WEB="no"
       fi
 
-      . ../build_cli.sh
+      # CLI build disabled for initial release
+      # . ../build_cli.sh
     fi
 
     VSCODE_PLATFORM="win32"
@@ -65,21 +67,23 @@ if [[ "${SHOULD_BUILD}" == "yes" ]]; then
 
       find "../VSCode-linux-${VSCODE_ARCH}" -print0 | xargs -0 touch -c
 
-      . ../build_cli.sh
+      # CLI build disabled for initial release
+      # . ../build_cli.sh
     fi
 
     VSCODE_PLATFORM="linux"
   fi
 
-  if [[ "${SHOULD_BUILD_REH}" != "no" ]]; then
-    npm run gulp minify-vscode-reh
-    npm run gulp "vscode-reh-${VSCODE_PLATFORM}-${VSCODE_ARCH}-min-ci"
-  fi
+  # REH builds disabled for initial release
+  # if [[ "${SHOULD_BUILD_REH}" != "no" ]]; then
+  #   npm run gulp minify-vscode-reh
+  #   npm run gulp "vscode-reh-${VSCODE_PLATFORM}-${VSCODE_ARCH}-min-ci"
+  # fi
 
-  if [[ "${SHOULD_BUILD_REH_WEB}" != "no" ]]; then
-    npm run gulp minify-vscode-reh-web
-    npm run gulp "vscode-reh-web-${VSCODE_PLATFORM}-${VSCODE_ARCH}-min-ci"
-  fi
+  # if [[ "${SHOULD_BUILD_REH_WEB}" != "no" ]]; then
+  #   npm run gulp minify-vscode-reh-web
+  #   npm run gulp "vscode-reh-web-${VSCODE_PLATFORM}-${VSCODE_ARCH}-min-ci"
+  # fi
 
   cd ..
 fi

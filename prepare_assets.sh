@@ -149,11 +149,10 @@ elif [[ "${OS_NAME}" == "windows" ]]; then
 else
   cd vscode || { echo "'vscode' dir not found"; exit 1; }
 
-  if [[ "${SHOULD_BUILD_APPIMAGE}" != "no" && "${VSCODE_ARCH}" != "x64" ]]; then
-    SHOULD_BUILD_APPIMAGE="no"
-  fi
+  # Disable AppImage for now - requires special build environment
+  SHOULD_BUILD_APPIMAGE="no"
 
-  if [[ "${SHOULD_BUILD_DEB}" != "no" || "${SHOULD_BUILD_APPIMAGE}" != "no" ]]; then
+  if [[ "${SHOULD_BUILD_DEB}" != "no" ]]; then
     npm run gulp "vscode-linux-${VSCODE_ARCH}-prepare-deb"
     npm run gulp "vscode-linux-${VSCODE_ARCH}-build-deb"
   fi
@@ -161,10 +160,6 @@ else
   if [[ "${SHOULD_BUILD_RPM}" != "no" ]]; then
     npm run gulp "vscode-linux-${VSCODE_ARCH}-prepare-rpm"
     npm run gulp "vscode-linux-${VSCODE_ARCH}-build-rpm"
-  fi
-
-  if [[ "${SHOULD_BUILD_APPIMAGE}" != "no" ]]; then
-    . ../build/linux/appimage/build.sh
   fi
 
   cd ..
@@ -204,45 +199,28 @@ else
   VSCODE_PLATFORM="linux"
 fi
 
-if [[ "${SHOULD_BUILD_REH}" != "no" ]]; then
-  echo "Building and moving REH"
-  cd "vscode-reh-${VSCODE_PLATFORM}-${VSCODE_ARCH}"
-  tar czf "../assets/${APP_NAME_LC}-reh-${VSCODE_PLATFORM}-${VSCODE_ARCH}-${RELEASE_VERSION}.tar.gz" .
-  cd ..
-fi
+# REH builds disabled for initial release
+# if [[ "${SHOULD_BUILD_REH}" != "no" ]]; then
+#   echo "Building and moving REH"
+#   cd "vscode-reh-${VSCODE_PLATFORM}-${VSCODE_ARCH}"
+#   tar czf "../assets/${APP_NAME_LC}-reh-${VSCODE_PLATFORM}-${VSCODE_ARCH}-${RELEASE_VERSION}.tar.gz" .
+#   cd ..
+# fi
 
-if [[ "${SHOULD_BUILD_REH_WEB}" != "no" ]]; then
-  echo "Building and moving REH-web"
-  cd "vscode-reh-web-${VSCODE_PLATFORM}-${VSCODE_ARCH}"
-  tar czf "../assets/${APP_NAME_LC}-reh-web-${VSCODE_PLATFORM}-${VSCODE_ARCH}-${RELEASE_VERSION}.tar.gz" .
-  cd ..
-fi
+# if [[ "${SHOULD_BUILD_REH_WEB}" != "no" ]]; then
+#   echo "Building and moving REH-web"
+#   cd "vscode-reh-web-${VSCODE_PLATFORM}-${VSCODE_ARCH}"
+#   tar czf "../assets/${APP_NAME_LC}-reh-web-${VSCODE_PLATFORM}-${VSCODE_ARCH}-${RELEASE_VERSION}.tar.gz" .
+#   cd ..
+# fi
 
 set -ex
 
-if [[ "${SHOULD_BUILD_CLI}" != "no" ]]; then
-  echo "Building and moving CLI"
-
-  APPLICATION_NAME="$( node -p "require(\"./vscode/product.json\").applicationName" )"
-  NAME_SHORT="$( node -p "require(\"./vscode/product.json\").nameShort" )"
-  TUNNEL_APPLICATION_NAME="$( node -p "require(\"./vscode/product.json\").tunnelApplicationName" )"
-
-  mkdir -p "vscode-cli"
-
-  cd "vscode-cli"
-
-  if [[ "${OS_NAME}" == "osx" ]]; then
-    cp "../VSCode-${VSCODE_PLATFORM}-${VSCODE_ARCH}/${NAME_SHORT}.app/Contents/Resources/app/bin/${TUNNEL_APPLICATION_NAME}" "${APPLICATION_NAME}"
-  elif [[ "${OS_NAME}" == "windows" ]]; then
-    cp "../VSCode-${VSCODE_PLATFORM}-${VSCODE_ARCH}/bin/${TUNNEL_APPLICATION_NAME}.exe" "${APPLICATION_NAME}.exe"
-  else
-    cp "../VSCode-${VSCODE_PLATFORM}-${VSCODE_ARCH}/bin/${TUNNEL_APPLICATION_NAME}" "${APPLICATION_NAME}"
-  fi
-
-  tar czf "../assets/${APP_NAME_LC}-cli-${VSCODE_PLATFORM}-${VSCODE_ARCH}-${RELEASE_VERSION}.tar.gz" .
-
-  cd ..
-fi
+# CLI build disabled for now - requires tunnel binary from Rust build
+# if [[ "${SHOULD_BUILD_CLI}" != "no" ]]; then
+#   echo "Building and moving CLI"
+#   ...
+# fi
 
 if [[ "${OS_NAME}" != "windows" ]]; then
   ./prepare_checksums.sh
