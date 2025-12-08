@@ -1,10 +1,18 @@
-name: Build Windows
+name: stable-windows
 
 on:
   push:
     branches:
       - main
+    paths-ignore:
+      - '**/*.md'
   workflow_dispatch:
+
+env:
+  APP_NAME: Neko
+  BINARY_NAME: neko
+  OS_NAME: windows
+  VSCODE_QUALITY: stable
 
 jobs:
   build:
@@ -25,21 +33,16 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version-file: '.nvmrc'
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v2
-
       - name: Clone VSCode
         shell: bash
         run: . get_repo.sh
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build
         shell: bash
@@ -48,34 +51,35 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VSCODE_ARCH: ${{ matrix.vscode_arch }}
           npm_config_arch: ${{ matrix.npm_arch }}
-          OS_NAME: windows
-          SHOULD_BUILD: yes
-          CI_BUILD: no
+          SHOULD_BUILD: 'yes'
+          CI_BUILD: 'no'
 
       - name: Prepare assets
         shell: bash
         run: ./prepare_assets.sh
         env:
           VSCODE_ARCH: ${{ matrix.vscode_arch }}
-          OS_NAME: windows
 
-      - name: Upload System Installer artifact
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: neko-windows-system-${{ matrix.vscode_arch }}
-          path: assets/*System*.exe
+          name: neko-windows-${{ matrix.vscode_arch }}
+          path: assets/*
           if-no-files-found: ignore
+          retention-days: 7
 
-      - name: Upload User Installer artifact
-        uses: actions/upload-artifact@v4
+  trigger-deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: success()
+    steps:
+      - name: Trigger deploy check
+        uses: actions/github-script@v7
         with:
-          name: neko-windows-user-${{ matrix.vscode_arch }}
-          path: assets/*User*.exe
-          if-no-files-found: ignore
-
-      - name: Upload ZIP artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: neko-windows-zip-${{ matrix.vscode_arch }}
-          path: assets/*.zip
-          if-no-files-found: ignore
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'deploy.yml',
+              ref: 'main'
+            });
