@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "publisher": "gitneko",
   "license": "AGPL-3.0",
-  "icon": "assets/icons/neko.svg",
+  "icon": "assets/icons/neko.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/GitNekoTeam/neko"
