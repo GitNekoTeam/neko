@@ -1,0 +1,135 @@
+# VSCode/Neko build artifacts
+vscode/
+vscode-*/
+VS*/*
+VSCode*
+VSCodium*
+Neko-*/
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Environment variables
+*.env
+*.env.*
+!*.env.example
+.envrc
+
+# Build outputs
+assets/
+dist/
+out/
+*.vsix
+build/linux/appimage/out/
+build/linux/appimage/pkg2appimage.AppDir/
+build/linux/appimage/pkg2appimage-*.AppImage
+build/linux/appimage/pkg2appimage.AppImage
+build/linux/appimage/squashfs-root/
+build/linux/appimage/Neko/
+build/windows/msi/releasedir/
+build/windows/msi/Files*.wxs
+build/windows/msi/Files*.wixobj
+sourcemaps/
+stores/snapcraft/insider/*.snap
+stores/snapcraft/stable/*.snap
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.npm/
+.yarn/
+.pnpm-store/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# TypeScript
+*.tsbuildinfo
+.tscache/
+
+# IDE and editors
+.idea/
+.vscode/settings.json
+.vscode/launch.json
+*.swp
+*.swo
+*.swn
+*~
+*.sublime-workspace
+*.sublime-project
+
+# Test coverage
+coverage/
+.nyc_output/
+*.lcov
+.vitest/
+
+# Logs
+logs/
+*.log
+lerna-debug.log*
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Cache
+.cache/
+.eslintcache
+.prettiercache
+*.cache
+
+# Extensions build
+extensions/*/dist/
+extensions/*/node_modules/
+extensions/*/*.vsix
+extensions/*/.vscode-test/
+
+# Python (for build scripts)
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+.venv/
+
+# Electron
+electron/
+
+# Debug
+*.dmp
+*.stackdump
+
+# Certificates
+*.pem
+*.key
+*.crt
+*.p12
+
+# Local configuration
+.local/
+*.local
+
+# Snapcraft
+parts/
+prime/
+stage/
+*.snap
+
+# macOS code signing
+*.dmg
+*.pkg

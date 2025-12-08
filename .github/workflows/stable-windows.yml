@@ -1,0 +1,81 @@
+name: Build Windows
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - vscode_arch: x64
+            npm_arch: x64
+          - vscode_arch: arm64
+            npm_arch: arm64
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Clone VSCode
+        shell: bash
+        run: . get_repo.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build
+        shell: bash
+        run: ./build.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VSCODE_ARCH: ${{ matrix.vscode_arch }}
+          npm_config_arch: ${{ matrix.npm_arch }}
+          OS_NAME: windows
+          SHOULD_BUILD: yes
+          CI_BUILD: no
+
+      - name: Prepare assets
+        shell: bash
+        run: ./prepare_assets.sh
+        env:
+          VSCODE_ARCH: ${{ matrix.vscode_arch }}
+          OS_NAME: windows
+
+      - name: Upload System Installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: neko-windows-system-${{ matrix.vscode_arch }}
+          path: assets/*System*.exe
+          if-no-files-found: ignore
+
+      - name: Upload User Installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: neko-windows-user-${{ matrix.vscode_arch }}
+          path: assets/*User*.exe
+          if-no-files-found: ignore
+
+      - name: Upload ZIP artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: neko-windows-zip-${{ matrix.vscode_arch }}
+          path: assets/*.zip
+          if-no-files-found: ignore

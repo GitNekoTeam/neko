@@ -1,0 +1,393 @@
+{
+  "name": "neko-ai",
+  "displayName": "Neko AI",
+  "description": "AI-powered code assistant with codebase understanding, inline completion, and browser debugging",
+  "version": "1.0.0",
+  "publisher": "gitneko",
+  "license": "AGPL-3.0",
+  "icon": "assets/icons/neko.svg",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GitNekoTeam/neko"
+  },
+  "homepage": "https://gitneko.com",
+  "engines": {
+    "vscode": "^1.84.0"
+  },
+  "categories": [
+    "AI",
+    "Chat",
+    "Programming Languages",
+    "Machine Learning"
+  ],
+  "keywords": [
+    "neko",
+    "ai",
+    "assistant",
+    "copilot",
+    "autocomplete",
+    "code-completion",
+    "agent"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "neko-ai-sidebar",
+          "title": "Neko AI",
+          "icon": "assets/icons/neko.svg"
+        }
+      ]
+    },
+    "views": {
+      "neko-ai-sidebar": [
+        {
+          "type": "webview",
+          "id": "neko-ai.chatView",
+          "name": "Chat"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "neko-ai.newChat",
+        "title": "New Chat",
+        "icon": "$(add)",
+        "category": "Neko AI"
+      },
+      {
+        "command": "neko-ai.explainCode",
+        "title": "Explain Code",
+        "category": "Neko AI"
+      },
+      {
+        "command": "neko-ai.fixCode",
+        "title": "Fix Code",
+        "category": "Neko AI"
+      },
+      {
+        "command": "neko-ai.improveCode",
+        "title": "Improve Code",
+        "category": "Neko AI"
+      },
+      {
+        "command": "neko-ai.addToContext",
+        "title": "Add to Context",
+        "category": "Neko AI"
+      },
+      {
+        "command": "neko-ai.openSettings",
+        "title": "Open Settings",
+        "icon": "$(settings-gear)",
+        "category": "Neko AI"
+      },
+      {
+        "command": "neko-ai.openBrowser",
+        "title": "Open Browser Panel",
+        "category": "Neko AI"
+      },
+      {
+        "command": "neko-ai.indexCodebase",
+        "title": "Index Codebase",
+        "category": "Neko AI"
+      },
+      {
+        "command": "neko-ai.searchCodebase",
+        "title": "Search Codebase",
+        "category": "Neko AI"
+      },
+      {
+        "command": "neko-ai.generateCommitMessage",
+        "title": "Generate Commit Message",
+        "icon": {
+          "light": "assets/icons/neko-light.svg",
+          "dark": "assets/icons/neko-dark.svg"
+        },
+        "category": "Neko AI"
+      },
+      {
+        "command": "neko-ai.triggerInlineCompletion",
+        "title": "Trigger Inline Completion",
+        "category": "Neko AI"
+      },
+      {
+        "command": "neko-ai.acceptInlineCompletion",
+        "title": "Accept Inline Completion",
+        "category": "Neko AI"
+      },
+      {
+        "command": "neko-ai.cancelInlineCompletion",
+        "title": "Cancel Inline Completion",
+        "category": "Neko AI"
+      },
+      {
+        "command": "neko-ai.terminalExecute",
+        "title": "Execute Terminal Command",
+        "category": "Neko AI"
+      },
+      {
+        "command": "neko-ai.terminalExplain",
+        "title": "Explain Terminal Output",
+        "category": "Neko AI"
+      },
+      {
+        "command": "neko-ai.inlineEdit",
+        "title": "Inline Edit (Cmd+K)",
+        "category": "Neko AI"
+      },
+      {
+        "command": "neko-ai.composer",
+        "title": "Composer - Multi-file Edit",
+        "category": "Neko AI"
+      },
+      {
+        "command": "neko-ai.createRulesFile",
+        "title": "Create Rules File",
+        "category": "Neko AI"
+      },
+      {
+        "command": "neko-ai.showPendingChanges",
+        "title": "Show Pending Changes",
+        "category": "Neko AI"
+      },
+      {
+        "command": "neko-ai.showChatHistory",
+        "title": "Show Chat History",
+        "category": "Neko AI"
+      },
+      {
+        "command": "neko-ai.exportChat",
+        "title": "Export Chat",
+        "category": "Neko AI"
+      },
+      {
+        "command": "neko-ai.focus",
+        "title": "Focus Chat",
+        "category": "Neko AI"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "submenu": "neko-ai.contextMenu",
+          "group": "neko"
+        }
+      ],
+      "neko-ai.contextMenu": [
+        {
+          "command": "neko-ai.explainCode",
+          "group": "1_actions@1"
+        },
+        {
+          "command": "neko-ai.fixCode",
+          "group": "1_actions@2"
+        },
+        {
+          "command": "neko-ai.improveCode",
+          "group": "1_actions@3"
+        },
+        {
+          "command": "neko-ai.addToContext",
+          "group": "1_actions@4"
+        }
+      ],
+      "terminal/context": [
+        {
+          "command": "neko-ai.terminalExecute",
+          "group": "neko@1"
+        },
+        {
+          "command": "neko-ai.terminalExplain",
+          "group": "neko@2"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "neko-ai.newChat",
+          "group": "navigation@1",
+          "when": "view == neko-ai.chatView"
+        },
+        {
+          "command": "neko-ai.openSettings",
+          "group": "navigation@2",
+          "when": "view == neko-ai.chatView"
+        }
+      ],
+      "scm/title": [
+        {
+          "command": "neko-ai.generateCommitMessage",
+          "when": "scmProvider == git",
+          "group": "navigation"
+        }
+      ]
+    },
+    "submenus": [
+      {
+        "id": "neko-ai.contextMenu",
+        "label": "Neko AI"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "neko-ai.newChat",
+        "key": "ctrl+shift+n",
+        "mac": "cmd+shift+n"
+      },
+      {
+        "command": "neko-ai.triggerInlineCompletion",
+        "key": "ctrl+space",
+        "mac": "cmd+space",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "command": "neko-ai.acceptInlineCompletion",
+        "key": "tab",
+        "when": "editorTextFocus && neko-ai.hasInlineCompletion"
+      },
+      {
+        "command": "neko-ai.cancelInlineCompletion",
+        "key": "escape",
+        "when": "editorTextFocus && neko-ai.hasInlineCompletion"
+      },
+      {
+        "command": "neko-ai.addToContext",
+        "key": "ctrl+shift+a",
+        "mac": "cmd+shift+a",
+        "when": "editorTextFocus && editorHasSelection"
+      },
+      {
+        "command": "neko-ai.inlineEdit",
+        "key": "ctrl+k",
+        "mac": "cmd+k",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "neko-ai.composer",
+        "key": "ctrl+shift+i",
+        "mac": "cmd+shift+i"
+      },
+      {
+        "command": "neko-ai.showChatHistory",
+        "key": "ctrl+shift+h",
+        "mac": "cmd+shift+h"
+      }
+    ],
+    "configuration": {
+      "title": "Neko AI",
+      "properties": {
+        "neko-ai.provider": {
+          "type": "string",
+          "enum": [
+            "openai",
+            "anthropic",
+            "ollama",
+            "openrouter",
+            "azure",
+            "gemini",
+            "deepseek",
+            "custom"
+          ],
+          "default": "openai",
+          "description": "AI provider to use"
+        },
+        "neko-ai.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "API key for the selected provider"
+        },
+        "neko-ai.apiEndpoint": {
+          "type": "string",
+          "default": "",
+          "description": "Custom API endpoint (for custom provider)"
+        },
+        "neko-ai.model": {
+          "type": "string",
+          "default": "gpt-4",
+          "description": "Model to use for AI completions"
+        },
+        "neko-ai.completionModel": {
+          "type": "string",
+          "default": "gpt-3.5-turbo",
+          "description": "Model to use for inline completions"
+        },
+        "neko-ai.enableInlineCompletion": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable inline code completion"
+        },
+        "neko-ai.enableCodebaseIndexing": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable codebase indexing for semantic search"
+        },
+        "neko-ai.embeddingModel": {
+          "type": "string",
+          "default": "text-embedding-3-small",
+          "description": "Model to use for code embeddings"
+        },
+        "neko-ai.commandTimeout": {
+          "type": "number",
+          "default": 120,
+          "minimum": 10,
+          "maximum": 600,
+          "description": "Timeout in seconds for terminal commands"
+        },
+        "neko-ai.browserDebugPort": {
+          "type": "number",
+          "default": 9222,
+          "description": "Chrome remote debugging port"
+        },
+        "neko-ai.maxContextTokens": {
+          "type": "number",
+          "default": 8000,
+          "description": "Maximum tokens for context"
+        },
+        "neko-ai.temperature": {
+          "type": "number",
+          "default": 0.7,
+          "minimum": 0,
+          "maximum": 2,
+          "description": "Temperature for AI responses"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node esbuild.mjs",
+    "compile": "node esbuild.mjs --production",
+    "watch": "node esbuild.mjs --watch",
+    "lint": "eslint src --ext ts",
+    "test": "vitest run",
+    "build:webview": "cd webview-ui && npm run build",
+    "package": "npm run compile && npm run build:webview"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.51.0",
+    "@lancedb/lancedb": "^0.21.2",
+    "axios": "^1.12.0",
+    "diff": "^7.0.0",
+    "fast-xml-parser": "^5.0.0",
+    "ignore": "^7.0.3",
+    "js-tiktoken": "^1.0.8",
+    "openai": "^5.12.2",
+    "puppeteer-core": "^23.4.0",
+    "uuid": "^11.1.0",
+    "web-tree-sitter": "^0.25.6"
+  },
+  "devDependencies": {
+    "@types/diff": "^7.0.2",
+    "@types/node": "20.x",
+    "@types/uuid": "^10.0.0",
+    "@types/vscode": "^1.84.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "esbuild": "^0.25.0",
+    "eslint": "^8.57.0",
+    "typescript": "5.8.3",
+    "vitest": "^3.2.3"
+  }
+}

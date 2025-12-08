@@ -1,0 +1,70 @@
+name: Build macOS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - vscode_arch: x64
+            npm_arch: x64
+          - vscode_arch: arm64
+            npm_arch: arm64
+          - vscode_arch: universal
+            npm_arch: x64
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Clone VSCode
+        run: . get_repo.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build
+        run: ./build.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VSCODE_ARCH: ${{ matrix.vscode_arch }}
+          npm_config_arch: ${{ matrix.npm_arch }}
+          OS_NAME: osx
+          SHOULD_BUILD: yes
+          CI_BUILD: no
+
+      - name: Prepare assets
+        run: ./prepare_assets.sh
+        env:
+          VSCODE_ARCH: ${{ matrix.vscode_arch }}
+          OS_NAME: osx
+
+      - name: Upload DMG artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: neko-macos-dmg-${{ matrix.vscode_arch }}
+          path: assets/*.dmg
+          if-no-files-found: ignore
+
+      - name: Upload ZIP artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: neko-macos-zip-${{ matrix.vscode_arch }}
+          path: assets/*.zip
+          if-no-files-found: ignore

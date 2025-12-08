@@ -1,0 +1,87 @@
+name: Build Linux
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - vscode_arch: x64
+            npm_arch: x64
+          - vscode_arch: arm64
+            npm_arch: arm64
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq libxkbfile-dev pkg-config libsecret-1-dev libkrb5-dev
+
+      - name: Clone VSCode
+        run: . get_repo.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build
+        run: ./build.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VSCODE_ARCH: ${{ matrix.vscode_arch }}
+          npm_config_arch: ${{ matrix.npm_arch }}
+          OS_NAME: linux
+          SHOULD_BUILD: yes
+          CI_BUILD: no
+
+      - name: Prepare assets
+        run: ./prepare_assets.sh
+        env:
+          VSCODE_ARCH: ${{ matrix.vscode_arch }}
+          OS_NAME: linux
+
+      - name: Upload DEB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: neko-linux-deb-${{ matrix.vscode_arch }}
+          path: assets/*.deb
+          if-no-files-found: ignore
+
+      - name: Upload RPM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: neko-linux-rpm-${{ matrix.vscode_arch }}
+          path: assets/*.rpm
+          if-no-files-found: ignore
+
+      - name: Upload AppImage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: neko-linux-appimage-${{ matrix.vscode_arch }}
+          path: assets/*.AppImage
+          if-no-files-found: ignore
+
+      - name: Upload tar.gz artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: neko-linux-tar-${{ matrix.vscode_arch }}
+          path: assets/*.tar.gz
+          if-no-files-found: ignore
