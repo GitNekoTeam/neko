@@ -45,16 +45,16 @@ setpath "product" "introductoryVideosUrl" "https://gitneko.com/editor/videos"
 setpath "product" "keyboardShortcutsUrlLinux" "https://gitneko.com/editor/shortcuts/linux"
 setpath "product" "keyboardShortcutsUrlMac" "https://gitneko.com/editor/shortcuts/mac"
 setpath "product" "keyboardShortcutsUrlWin" "https://gitneko.com/editor/shortcuts/windows"
-setpath "product" "licenseUrl" "https://github.com/GitNekoTeam/neko/blob/main/LICENSE"
+setpath "product" "licenseUrl" "https://github.com/OfficialNekoTeam/neko/blob/main/LICENSE"
 setpath_json "product" "linkProtectionTrustedDomains" '["https://open-vsx.org", "https://gitneko.com"]'
 setpath "product" "releaseNotesUrl" "https://gitneko.com/editor/releases"
-setpath "product" "reportIssueUrl" "https://github.com/GitNekoTeam/neko/issues/new"
-setpath "product" "requestFeatureUrl" "https://github.com/GitNekoTeam/neko/issues/new?labels=feature-request"
+  setpath "product" "reportIssueUrl" "https://github.com/OfficialNekoTeam/neko/issues/new"
+  setpath "product" "requestFeatureUrl" "https://github.com/OfficialNekoTeam/neko/issues/new?labels=feature-request"
 setpath "product" "tipsAndTricksUrl" "https://gitneko.com/editor/tips"
 setpath "product" "twitterUrl" "https://gitneko.com"
 
 if [[ "${DISABLE_UPDATE}" != "yes" ]]; then
-  setpath "product" "updateUrl" "https://raw.githubusercontent.com/GitNekoTeam/versions/refs/heads/main"
+  setpath "product" "updateUrl" "https://raw.githubusercontent.com/OfficialNekoTeam/versions/refs/heads/main"
   setpath "product" "downloadUrl" "https://gitneko.com/editor/download"
 fi
 
@@ -218,7 +218,7 @@ cp package.json{,.bak}
 
 setpath "package" "version" "${RELEASE_VERSION%-insider}"
 
-replace 's|Microsoft Corporation|GitNeko Team|' package.json
+replace 's|Microsoft Corporation|OfficialNeko Team|' package.json
 
 cp resources/server/manifest.json{,.bak}
 
@@ -235,8 +235,8 @@ replace "s|\\[\\/\\* BUILTIN_ANNOUNCEMENTS \\*\\/\\]|$( tr -d '\n' < ../announce
 
 ../undo_telemetry.sh
 
-replace 's|Microsoft Corporation|GitNeko Team|' build/lib/electron.js
-replace 's|Microsoft Corporation|GitNeko Team|' build/lib/electron.ts
+replace 's|Microsoft Corporation|OfficialNeko Team|' build/lib/electron.js
+replace 's|Microsoft Corporation|OfficialNeko Team|' build/lib/electron.ts
 replace 's|([0-9]) Microsoft|\1 GitNeko|' build/lib/electron.js
 replace 's|([0-9]) Microsoft|\1 GitNeko|' build/lib/electron.ts
 
@@ -255,14 +255,14 @@ if [[ "${OS_NAME}" == "linux" ]]; then
   sed -i 's|https://code.visualstudio.com|https://gitneko.com|' resources/linux/code.appdata.xml
 
   # control.template
-  sed -i 's|Microsoft Corporation <vscode-linux@microsoft.com>|GitNeko Team https://github.com/GitNekoTeam/neko/graphs/contributors|'  resources/linux/debian/control.template
+  sed -i 's|Microsoft Corporation <vscode-linux@microsoft.com>|OfficialNeko Team https://github.com/OfficialNekoTeam/neko/graphs/contributors|'  resources/linux/debian/control.template
   sed -i 's|Visual Studio Code|Neko|g' resources/linux/debian/control.template
   sed -i 's|https://code.visualstudio.com/docs/setup/linux|https://gitneko.com/editor/download|' resources/linux/debian/control.template
   sed -i 's|https://code.visualstudio.com|https://gitneko.com|' resources/linux/debian/control.template
 
   # code.spec.template
-  sed -i 's|Microsoft Corporation|GitNeko Team|' resources/linux/rpm/code.spec.template
-  sed -i 's|Visual Studio Code Team <vscode-linux@microsoft.com>|GitNeko Team https://github.com/GitNekoTeam/neko/graphs/contributors|' resources/linux/rpm/code.spec.template
+  sed -i 's|Microsoft Corporation|OfficialNeko Team|' resources/linux/rpm/code.spec.template
+  sed -i 's|Visual Studio Code Team <vscode-linux@microsoft.com>|OfficialNeko Team https://github.com/OfficialNekoTeam/neko/graphs/contributors|' resources/linux/rpm/code.spec.template
   sed -i 's|Visual Studio Code|Neko|' resources/linux/rpm/code.spec.template
   sed -i 's|https://code.visualstudio.com/docs/setup/linux|https://gitneko.com/editor/download|' resources/linux/rpm/code.spec.template
   sed -i 's|https://code.visualstudio.com|https://gitneko.com|' resources/linux/rpm/code.spec.template
@@ -272,7 +272,7 @@ if [[ "${OS_NAME}" == "linux" ]]; then
 elif [[ "${OS_NAME}" == "windows" ]]; then
   # code.iss
   sed -i 's|https://code.visualstudio.com|https://gitneko.com|' build/win32/code.iss
-  sed -i 's|Microsoft Corporation|GitNeko Team|' build/win32/code.iss
+  sed -i 's|Microsoft Corporation|OfficialNeko Team|' build/win32/code.iss
 fi
 
 cd ..

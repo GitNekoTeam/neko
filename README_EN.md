@@ -5,19 +5,19 @@
 </div>
 
 <p align="center">
-    <a href="https://github.com/GitNekoTeam/neko/blob/main/LICENSE">
+    <a href="https://github.com/OfficialNekoTeam/neko/blob/main/LICENSE">
         <img src="https://img.shields.io/badge/license-AGPL--3.0-blue.svg" alt="License"/>
     </a>
-    <a href="https://github.com/GitNekoTeam/neko/actions/workflows/stable-linux.yml">
+    <a href="https://github.com/OfficialNekoTeam/neko/actions/workflows/stable-linux.yml">
         <img src="https://img.shields.io/github/actions/workflow/status/GitNekoTeam/neko/stable-linux.yml?branch=main&label=Linux" alt="Linux Build"/>
     </a>
-    <a href="https://github.com/GitNekoTeam/neko/actions/workflows/stable-macos.yml">
+    <a href="https://github.com/OfficialNekoTeam/neko/actions/workflows/stable-macos.yml">
         <img src="https://img.shields.io/github/actions/workflow/status/GitNekoTeam/neko/stable-macos.yml?branch=main&label=macOS" alt="macOS Build"/>
     </a>
-    <a href="https://github.com/GitNekoTeam/neko/actions/workflows/stable-windows.yml">
+    <a href="https://github.com/OfficialNekoTeam/neko/actions/workflows/stable-windows.yml">
         <img src="https://img.shields.io/github/actions/workflow/status/GitNekoTeam/neko/stable-windows.yml?branch=main&label=Windows" alt="Windows Build"/>
     </a>
-    <a href="https://github.com/GitNekoTeam/neko/releases">
+    <a href="https://github.com/OfficialNekoTeam/neko/releases">
         <img src="https://img.shields.io/github/v/release/GitNekoTeam/neko?label=Release" alt="Release"/>
     </a>
 </p>
@@ -68,7 +68,7 @@ English, Simplified Chinese, Traditional Chinese, Japanese, Korean, German, Fren
 
 ## Download
 
-Download the latest release from [GitHub Releases](https://github.com/GitNekoTeam/neko/releases) or visit our [official website](https://gitneko.com/editor/download).
+Download the latest release from [GitHub Releases](https://github.com/OfficialNekoTeam/neko/releases) or visit our [official website](https://gitneko.com/editor/download).
 
 ### Supported Platforms
 
@@ -134,7 +134,7 @@ As you type code in the editor, AI will automatically provide completion suggest
 
 ```bash
 # Clone the repository
-git clone https://github.com/GitNekoTeam/neko.git
+git clone https://github.com/OfficialNekoTeam/neko.git
 cd neko
 
 # Build
@@ -192,6 +192,6 @@ This project is licensed under the [GNU Affero General Public License v3.0](LICE
 
 <p align="center">
     <a href="https://gitneko.com">Official Website</a> |
-    <a href="https://github.com/GitNekoTeam/neko/issues">Report Issues</a> |
-    <a href="https://github.com/GitNekoTeam/neko/discussions">Discussions</a>
+    <a href="https://github.com/OfficialNekoTeam/neko/issues">Report Issues</a> |
+    <a href="https://github.com/OfficialNekoTeam/neko/discussions">Discussions</a>
 </p>

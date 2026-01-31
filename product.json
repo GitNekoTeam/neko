@@ -5,8 +5,8 @@
   "dataFolderName": ".neko",
   "win32MutexName": "neko",
   "licenseName": "AGPL-3.0",
-  "licenseUrl": "https://github.com/GitNekoTeam/neko/blob/main/LICENSE",
-  "serverLicenseUrl": "https://github.com/GitNekoTeam/neko/blob/main/LICENSE",
+  "licenseUrl": "https://github.com/OfficialNekoTeam/neko/blob/main/LICENSE",
+  "serverLicenseUrl": "https://github.com/OfficialNekoTeam/neko/blob/main/LICENSE",
   "win32DirName": "Neko",
   "win32NameVersion": "Neko",
   "win32RegValueName": "Neko",
@@ -21,9 +21,9 @@
   "darwinBundleIdentifier": "com.gitneko.Neko",
   "linuxIconName": "neko",
   "urlProtocol": "neko",
-  "reportIssueUrl": "https://github.com/GitNekoTeam/neko/issues/new",
+  "reportIssueUrl": "https://github.com/OfficialNekoTeam/neko/issues/new",
   "downloadUrl": "https://gitneko.com/editor/download",
-  "updateUrl": "https://raw.githubusercontent.com/GitNekoTeam/versions/refs/heads/main",
+  "updateUrl": "https://raw.githubusercontent.com/OfficialNekoTeam/versions/refs/heads/main",
   "quality": "stable",
   "extensionsGallery": {
     "serviceUrl": "https://open-vsx.org/vscode/gallery",
@@ -34,7 +34,7 @@
   "linkProtectionTrustedDomains": [
     "https://open-vsx.org",
     "https://gitneko.com",
-    "https://github.com/GitNekoTeam"
+    "https://github.com/OfficialNekoTeam"
   ],
   "extensionAllowedBadgeProviders": [
     "api.bintray.com",

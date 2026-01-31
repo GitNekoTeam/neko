@@ -2,9 +2,9 @@
 
 APP_NAME="${APP_NAME:-Neko}"
 APP_NAME_LC="$( echo "${APP_NAME}" | awk '{print tolower($0)}' )"
-ASSETS_REPOSITORY="${ASSETS_REPOSITORY:-GitNekoTeam/neko}"
+ASSETS_REPOSITORY="${ASSETS_REPOSITORY:-OfficialNekoTeam/neko}"
 BINARY_NAME="${BINARY_NAME:-neko}"
-GH_REPO_PATH="${GH_REPO_PATH:-GitNekoTeam/neko}"
+GH_REPO_PATH="${GH_REPO_PATH:-OfficialNekoTeam/neko}"
 ORG_NAME="${ORG_NAME:-GitNeko}"
 TUNNEL_APP_NAME="${TUNNEL_APP_NAME:-"${BINARY_NAME}-tunnel"}"
 

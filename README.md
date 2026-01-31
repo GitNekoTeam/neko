@@ -5,19 +5,19 @@
 </div>
 
 <p align="center">
-    <a href="https://github.com/GitNekoTeam/neko/blob/main/LICENSE">
+    <a href="https://github.com/OfficialNekoTeam/neko/blob/main/LICENSE">
         <img src="https://img.shields.io/badge/license-AGPL--3.0-blue.svg" alt="License"/>
     </a>
-    <a href="https://github.com/GitNekoTeam/neko/actions/workflows/stable-linux.yml">
+    <a href="https://github.com/OfficialNekoTeam/neko/actions/workflows/stable-linux.yml">
         <img src="https://img.shields.io/github/actions/workflow/status/GitNekoTeam/neko/stable-linux.yml?branch=main&label=Linux" alt="Linux Build"/>
     </a>
-    <a href="https://github.com/GitNekoTeam/neko/actions/workflows/stable-macos.yml">
+    <a href="https://github.com/OfficialNekoTeam/neko/actions/workflows/stable-macos.yml">
         <img src="https://img.shields.io/github/actions/workflow/status/GitNekoTeam/neko/stable-macos.yml?branch=main&label=macOS" alt="macOS Build"/>
     </a>
-    <a href="https://github.com/GitNekoTeam/neko/actions/workflows/stable-windows.yml">
+    <a href="https://github.com/OfficialNekoTeam/neko/actions/workflows/stable-windows.yml">
         <img src="https://img.shields.io/github/actions/workflow/status/GitNekoTeam/neko/stable-windows.yml?branch=main&label=Windows" alt="Windows Build"/>
     </a>
-    <a href="https://github.com/GitNekoTeam/neko/releases">
+    <a href="https://github.com/OfficialNekoTeam/neko/releases">
         <img src="https://img.shields.io/github/v/release/GitNekoTeam/neko?label=Release" alt="Release"/>
     </a>
 </p>
@@ -68,7 +68,7 @@ Neko 是一款基于 [VSCodium](https://github.com/VSCodium/vscodium) 构建的�
 
 ## 下载安装
 
-从 [GitHub Releases](https://github.com/GitNekoTeam/neko/releases) 下载最新版本，或访问[官方网站](https://gitneko.com/editor/download)。
+从 [GitHub Releases](https://github.com/OfficialNekoTeam/neko/releases) 下载最新版本，或访问[官方网站](https://gitneko.com/editor/download)。
 
 ### 支持平台
 
@@ -134,7 +134,7 @@ Neko 是一款基于 [VSCodium](https://github.com/VSCodium/vscodium) 构建的�
 
 ```bash
 # 克隆仓库
-git clone https://github.com/GitNekoTeam/neko.git
+git clone https://github.com/OfficialNekoTeam/neko.git
 cd neko
 
 # 构建
@@ -192,6 +192,6 @@ neko/
 
 <p align="center">
     <a href="https://gitneko.com">官方网站</a> |
-    <a href="https://github.com/GitNekoTeam/neko/issues">问题反馈</a> |
-    <a href="https://github.com/GitNekoTeam/neko/discussions">社区讨论</a>
+    <a href="https://github.com/OfficialNekoTeam/neko/issues">问题反馈</a> |
+    <a href="https://github.com/OfficialNekoTeam/neko/discussions">社区讨论</a>
 </p>

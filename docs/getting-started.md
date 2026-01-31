@@ -19,7 +19,7 @@ Neko can be installed on Windows, macOS, and Linux.
 
 ### Download
 
-Visit the [Releases page](https://github.com/GitNekoTeam/neko/releases) to download the latest version for your platform:
+Visit the [Releases page](https://github.com/OfficialNekoTeam/neko/releases) to download the latest version for your platform:
 
 - **Windows**: `.exe` installer (System or User) or `.zip` portable
 - **macOS**: `.zip` (x64, ARM64, or Universal)
@@ -76,7 +76,7 @@ Here are some essential keyboard shortcuts to get you started:
 
 Once you're comfortable with the basics, you might want to:
 
-- Explore the [documentation](https://github.com/GitNekoTeam/neko/blob/main/docs/index.md) for more details
-- Join the [community](https://github.com/GitNekoTeam/neko/discussions) to ask questions and share tips
-- Report issues on [GitHub](https://github.com/GitNekoTeam/neko/issues)
-- Contribute to the [project](https://github.com/GitNekoTeam/neko/blob/main/CONTRIBUTING.md)
+- Explore the [documentation](https://github.com/OfficialNekoTeam/neko/blob/main/docs/index.md) for more details
+- Join the [community](https://github.com/OfficialNekoTeam/neko/discussions) to ask questions and share tips
+- Report issues on [GitHub](https://github.com/OfficialNekoTeam/neko/issues)
+- Contribute to the [project](https://github.com/OfficialNekoTeam/neko/blob/main/CONTRIBUTING.md)

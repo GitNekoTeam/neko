@@ -29,7 +29,7 @@ Welcome to the Neko AI Code Editor documentation.
 
 ## Quick Links
 
-- [GitHub Repository](https://github.com/GitNekoTeam/neko)
-- [Releases](https://github.com/GitNekoTeam/neko/releases)
-- [Issues](https://github.com/GitNekoTeam/neko/issues)
-- [Discussions](https://github.com/GitNekoTeam/neko/discussions)
+- [GitHub Repository](https://github.com/OfficialNekoTeam/neko)
+- [Releases](https://github.com/OfficialNekoTeam/neko/releases)
+- [Issues](https://github.com/OfficialNekoTeam/neko/issues)
+- [Discussions](https://github.com/OfficialNekoTeam/neko/discussions)
